@@ -1,0 +1,15 @@
+{
+  "name": "pmo-sistema",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión de Proyectos PMO",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "db:setup": "mysql -u root -p < database/schema.sql && mysql -u root -p < database/seed.sql"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
