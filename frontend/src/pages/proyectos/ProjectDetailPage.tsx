@@ -18,6 +18,9 @@ import {
   Clock,
   TrendingUp,
   ChevronRight,
+  Package,
+  BookOpen,
+  Activity,
 } from 'lucide-react';
 
 const ProjectDetailPage: React.FC = () => {
@@ -99,6 +102,39 @@ const ProjectDetailPage: React.FC = () => {
     { id: 'presupuesto', label: 'Presupuesto', desc: 'Costos por actividad', icon: DollarSign, color: 'amber' },
     { id: 'riesgos', label: 'Riesgos', desc: 'Gestion de riesgos', icon: AlertTriangle, color: 'red' },
     { id: 'recursos', label: 'Recursos', desc: 'Asignacion de personal', icon: Users, color: 'slate' },
+  ];
+
+  const inicioModules = [
+    { id: 'charter', label: 'Acta Constitucion', desc: 'Documento formal del proyecto', icon: FileText, color: 'blue', path: `/proyectos/${id}/inicio?tab=charter` },
+    { id: 'stakeholders', label: 'Stakeholders', desc: 'Personas e interesados', icon: Users, color: 'emerald', path: `/proyectos/${id}/inicio?tab=stakeholders` },
+    { id: 'viabilidad', label: 'Viabilidad', desc: 'Analisis tecnico y economico', icon: CheckCircle2, color: 'violet', path: `/proyectos/${id}/inicio?tab=viabilidad` },
+  ];
+
+  const ejecucionModules = [
+    { id: 'issues', label: 'Issues', desc: 'Problemas y bloqueadores', icon: AlertTriangle, color: 'red', path: `/proyectos/${id}/ejecucion?tab=issues` },
+    { id: 'entregables', label: 'Entregables', desc: 'Productos terminados', icon: Package, color: 'blue', path: `/proyectos/${id}/ejecucion?tab=entregables` },
+    { id: 'bitacora', label: 'Bitacora', desc: 'Registro de eventos', icon: BookOpen, color: 'emerald', path: `/proyectos/${id}/ejecucion?tab=bitacora` },
+    { id: 'actividades', label: 'Actividades', desc: 'Registro de avances', icon: Activity, color: 'amber', path: `/proyectos/${id}/ejecucion?tab=actividades` },
+  ];
+
+  const monitoreoModules = [
+    { id: 'dashboard', label: 'Dashboard', desc: 'Vista general de avance', icon: BarChart3, color: 'blue', path: `/proyectos/${id}/monitoreo?tab=dashboard` },
+    { id: 'valor-ganado', label: 'Valor Ganado', desc: 'Curva S y metricas', icon: TrendingUp, color: 'emerald', path: `/proyectos/${id}/monitoreo?tab=valor-ganado` },
+    { id: 'indicadores', label: 'Indicadores', desc: 'KPIs del proyecto', icon: Target, color: 'violet', path: `/proyectos/${id}/monitoreo?tab=indicadores` },
+    { id: 'cambios', label: 'Control Cambios', desc: 'Solicitudes de cambio', icon: AlertCircle, color: 'amber', path: `/proyectos/${id}/monitoreo?tab=cambios` },
+  ];
+
+  const cierreModules = [
+    { id: 'checklist', label: 'Checklist', desc: 'Verificacion de cierre', icon: CheckCircle2, color: 'emerald', path: `/proyectos/${id}/cierre?tab=checklist` },
+    { id: 'lecciones', label: 'Lecciones', desc: 'Aprendizajes del proyecto', icon: BookOpen, color: 'blue', path: `/proyectos/${id}/cierre?tab=lecciones` },
+    { id: 'transferencias', label: 'Transferencias', desc: 'Entrega de activos', icon: Package, color: 'violet', path: `/proyectos/${id}/cierre?tab=transferencias` },
+    { id: 'financiero', label: 'Cierre Financiero', desc: 'Liquidacion final', icon: DollarSign, color: 'amber', path: `/proyectos/${id}/cierre?tab=financiero` },
+  ];
+
+  const evaluacionModules = [
+    { id: 'resumen', label: 'Resumen', desc: 'Resultados del proyecto', icon: BarChart3, color: 'blue', path: `/proyectos/${id}/evaluacion?tab=resumen` },
+    { id: 'evaluacion', label: 'Evaluacion', desc: 'Medios y fines', icon: Target, color: 'emerald', path: `/proyectos/${id}/evaluacion?tab=evaluacion` },
+    { id: 'encuestas', label: 'Encuestas', desc: 'Satisfaccion beneficiarios', icon: Users, color: 'violet', path: `/proyectos/${id}/evaluacion?tab=encuestas` },
   ];
 
   return (
@@ -258,22 +294,31 @@ const ProjectDetailPage: React.FC = () => {
 
         {activeTab === 'inicio' && (
           <div className="p-6">
-            <div className="text-center py-12">
-              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Target className="w-6 h-6 text-slate-400 dark:text-slate-500" />
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                Modulo de Inicio
-              </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                Acta de Constitucion, Stakeholders, Analisis de Viabilidad
-              </p>
-              <button
-                onClick={() => navigate(`/proyectos/${id}/inicio`)}
-                className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-              >
-                Abrir Modulo de Inicio
-              </button>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">
+              Modulos de Inicio
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {inicioModules.map((mod) => {
+                const Icon = mod.icon;
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => navigate(mod.path)}
+                    className="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${mod.color}-50 dark:bg-${mod.color}-900/30`}>
+                        <Icon className={`w-5 h-5 text-${mod.color}-500 dark:text-${mod.color}-400`} />
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary-400 transition-colors" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {mod.label}
+                    </h4>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{mod.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -311,88 +356,124 @@ const ProjectDetailPage: React.FC = () => {
 
         {activeTab === 'ejecucion' && (
           <div className="p-6">
-            <div className="text-center py-12">
-              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Zap className="w-6 h-6 text-slate-400 dark:text-slate-500" />
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                Modulo de Ejecucion
-              </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                Issues, Entregables, Bitacora
-              </p>
-              <button
-                onClick={() => navigate(`/proyectos/${id}/ejecucion`)}
-                className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-              >
-                Abrir Módulo de Ejecución
-              </button>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">
+              Modulos de Ejecucion
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {ejecucionModules.map((mod) => {
+                const Icon = mod.icon;
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => navigate(mod.path)}
+                    className="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${mod.color}-50 dark:bg-${mod.color}-900/30`}>
+                        <Icon className={`w-5 h-5 text-${mod.color}-500 dark:text-${mod.color}-400`} />
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary-400 transition-colors" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {mod.label}
+                    </h4>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{mod.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
 
         {activeTab === 'monitoreo' && (
           <div className="p-6">
-            <div className="text-center py-12">
-              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                <TrendingUp className="w-6 h-6 text-slate-400 dark:text-slate-500" />
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                Modulo de Monitoreo
-              </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                Avance, Valor Ganado, KPIs, Cambios
-              </p>
-              <button
-                onClick={() => navigate(`/proyectos/${id}/monitoreo`)}
-                className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-              >
-                Abrir Módulo de Monitoreo
-              </button>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">
+              Modulos de Monitoreo
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {monitoreoModules.map((mod) => {
+                const Icon = mod.icon;
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => navigate(mod.path)}
+                    className="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${mod.color}-50 dark:bg-${mod.color}-900/30`}>
+                        <Icon className={`w-5 h-5 text-${mod.color}-500 dark:text-${mod.color}-400`} />
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary-400 transition-colors" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {mod.label}
+                    </h4>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{mod.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
 
         {activeTab === 'cierre' && (
           <div className="p-6">
-            <div className="text-center py-12">
-              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckCircle2 className="w-6 h-6 text-slate-400 dark:text-slate-500" />
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                Modulo de Cierre
-              </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                Checklist, Lecciones, Transferencias
-              </p>
-              <button
-                onClick={() => navigate(`/proyectos/${id}/cierre`)}
-                className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-              >
-                Abrir Módulo de Cierre
-              </button>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">
+              Modulos de Cierre
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {cierreModules.map((mod) => {
+                const Icon = mod.icon;
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => navigate(mod.path)}
+                    className="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${mod.color}-50 dark:bg-${mod.color}-900/30`}>
+                        <Icon className={`w-5 h-5 text-${mod.color}-500 dark:text-${mod.color}-400`} />
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary-400 transition-colors" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {mod.label}
+                    </h4>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{mod.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
 
         {activeTab === 'evaluacion' && (
           <div className="p-6">
-            <div className="text-center py-12">
-              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                <AlertCircle className="w-6 h-6 text-slate-400 dark:text-slate-500" />
-              </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                Modulo de Evaluacion
-              </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                Medios, Fines, Encuestas
-              </p>
-              <button
-                onClick={() => navigate(`/proyectos/${id}/evaluacion`)}
-                className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-              >
-                Abrir Módulo de Evaluación
-              </button>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">
+              Modulos de Evaluacion
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {evaluacionModules.map((mod) => {
+                const Icon = mod.icon;
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => navigate(mod.path)}
+                    className="p-5 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${mod.color}-50 dark:bg-${mod.color}-900/30`}>
+                        <Icon className={`w-5 h-5 text-${mod.color}-500 dark:text-${mod.color}-400`} />
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary-400 transition-colors" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {mod.label}
+                    </h4>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{mod.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}

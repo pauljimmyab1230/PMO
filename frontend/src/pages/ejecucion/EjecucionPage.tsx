@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   ejecucionService,
   EjecucionSummary,
@@ -31,6 +31,7 @@ import {
 
 const EjecucionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [summary, setSummary] = useState<EjecucionSummary | null>(null);
   const [issues, setIssues] = useState<Issue[]>([]);
   const [entregables, setEntregables] = useState<Entregable[]>([]);
@@ -40,7 +41,9 @@ const EjecucionPage: React.FC = () => {
   const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'issues' | 'entregables' | 'bitacora' | 'actividades'>('issues');
+  const [activeTab, setActiveTab] = useState<'issues' | 'entregables' | 'bitacora' | 'actividades'>(
+    (searchParams.get('tab') as any) || 'issues'
+  );
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [editingItem, setEditingItem] = useState<any>(null);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   monitoreoService,
   MonitoreoDashboard,
@@ -30,6 +30,7 @@ import { formatCurrency } from '../../utils/format';
 
 const MonitoreoPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [dashboard, setDashboard] = useState<MonitoreoDashboard | null>(null);
   const [valorGanado, setValorGanado] = useState<ValorGanado[]>([]);
   const [indicadores, setIndicadores] = useState<Indicador[]>([]);
@@ -37,7 +38,9 @@ const MonitoreoPage: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'valor-ganado' | 'indicadores' | 'cambios'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'valor-ganado' | 'indicadores' | 'cambios'>(
+    (searchParams.get('tab') as any) || 'dashboard'
+  );
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
 

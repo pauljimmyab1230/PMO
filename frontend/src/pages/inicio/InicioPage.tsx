@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   inicioService,
   Charter,
@@ -30,13 +30,16 @@ import {
 
 const InicioPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [charter, setCharter] = useState<Charter | null>(null);
   const [stakeholders, setStakeholders] = useState<Stakeholder[]>([]);
   const [viabilidad, setViabilidad] = useState<Viabilidad[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'charter' | 'stakeholders' | 'viabilidad'>('charter');
+  const [activeTab, setActiveTab] = useState<'charter' | 'stakeholders' | 'viabilidad'>(
+    (searchParams.get('tab') as any) || 'charter'
+  );
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [editingItem, setEditingItem] = useState<any>(null);

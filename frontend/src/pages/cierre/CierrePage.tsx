@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   cierreService,
   CierreProyecto,
@@ -32,6 +32,7 @@ import { formatCurrency } from '../../utils/format';
 
 const CierrePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [cierre, setCierre] = useState<CierreProyecto | null>(null);
   const [lecciones, setLecciones] = useState<Leccion[]>([]);
   const [transferencias, setTransferencias] = useState<Transferencia[]>([]);
@@ -40,7 +41,9 @@ const CierrePage: React.FC = () => {
   const [areas, setAreas] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'checklist' | 'lecciones' | 'transferencias' | 'financiero'>('checklist');
+  const [activeTab, setActiveTab] = useState<'checklist' | 'lecciones' | 'transferencias' | 'financiero'>(
+    (searchParams.get('tab') as any) || 'checklist'
+  );
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
 

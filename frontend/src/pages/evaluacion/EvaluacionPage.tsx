@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   evaluacionService,
   Evaluacion,
@@ -27,12 +27,15 @@ import { formatCurrency } from '../../utils/format';
 
 const EvaluacionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [resumen, setResumen] = useState<ResumenEvaluacion | null>(null);
   const [evaluacion, setEvaluacion] = useState<Evaluacion | null>(null);
   const [encuestas, setEncuestas] = useState<Encuesta[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'resumen' | 'evaluacion' | 'encuestas'>('resumen');
+  const [activeTab, setActiveTab] = useState<'resumen' | 'evaluacion' | 'encuestas'>(
+    (searchParams.get('tab') as any) || 'resumen'
+  );
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
 
