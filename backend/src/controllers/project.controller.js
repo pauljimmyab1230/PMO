@@ -18,7 +18,7 @@ exports.getAll = async (req, res) => {
     `);
     res.json({ success: true, data: projects });
   } catch (error) {
-    console.error('Get projects error:', error);
+    logger.error('Get dashboard error', { error: error.message });
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -48,7 +48,7 @@ exports.getById = async (req, res) => {
 
     res.json({ success: true, data: projects[0] });
   } catch (error) {
-    console.error('Get project error:', error);
+    logger.error('Get project error', { error: error.message });
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -145,7 +145,7 @@ exports.update = async (req, res) => {
     const [updated] = await pool.query('SELECT * FROM proyectos WHERE id = ?', [id]);
     res.json({ success: true, data: updated[0] });
   } catch (error) {
-    console.error('Update project error:', error);
+    logger.error('Create project error', { error: error.message });
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -162,7 +162,7 @@ exports.delete = async (req, res) => {
     await pool.query('DELETE FROM proyectos WHERE id = ?', [id]);
     res.json({ success: true, message: 'Project deleted' });
   } catch (error) {
-    console.error('Delete project error:', error);
+    logger.error('Update project error', { error: error.message });
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -191,7 +191,7 @@ exports.updateState = async (req, res) => {
 
     res.json({ success: true, data: updated[0] });
   } catch (error) {
-    console.error('Update project state error:', error);
+    logger.error('Delete project error', { error: error.message });
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -275,7 +275,7 @@ exports.getDashboard = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Get dashboard error:', error);
+    logger.error('Update project state error', { error: error.message });
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };

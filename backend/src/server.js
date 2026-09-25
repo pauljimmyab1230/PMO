@@ -6,6 +6,9 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const { testConnection } = require('./config/database');
+const logger = require('./utils/logger');
+
+// Routes
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const projectRoutes = require('./routes/project.routes');
@@ -31,7 +34,7 @@ const portafolioRoutes = require('./routes/portafolio.routes');
 const adminRoutes = require('./routes/admin.routes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(helmet());
@@ -39,29 +42,28 @@ app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true
 }));
-app.use(morgan('dev'));
-app.use(express.json());
+app.use(morgan('combined'));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Rate limiting
 const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // 100 requests por ventana
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: { success: false, message: 'Too many requests, please try again later' }
 });
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // 5 intentos de login
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: { success: false, message: 'Too many login attempts, please try again later' }
 });
 
 app.use('/api/', generalLimiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
-app.use('/api/auth/register', authLimiter);
 
-// Routes
+// Routes - Agrupadas por módulo
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', userRoutes);
 app.use('/api/proyectos', projectRoutes);
@@ -74,13 +76,10 @@ app.use('/api/proyectos', recursosRoutes);
 app.use('/api/proyectos', ejecucionRoutes);
 app.use('/api/proyectos', monitoreoRoutes);
 app.use('/api/proyectos', cierreRoutes);
-app.use('/api/cierre', cierreRoutes);
 app.use('/api/proyectos', evaluacionRoutes);
-app.use('/api/evaluacion', evaluacionRoutes);
 app.use('/api/proyectos', inicioRoutes);
-app.use('/api/inicio', inicioItemRoutes);
-app.use('/api', portafolioRoutes);
-app.use('/api', adminRoutes);
+
+// Rutas para elementos individuales
 app.use('/api/marco-logico', marcoLogicoItemRoutes);
 app.use('/api/wbs', wbsItemRoutes);
 app.use('/api/cronograma', cronogramaRoutes);
@@ -89,15 +88,25 @@ app.use('/api/riesgos', riesgosItemRoutes);
 app.use('/api/recursos', recursosItemRoutes);
 app.use('/api/ejecucion', ejecucionItemRoutes);
 app.use('/api/monitoreo', monitoreoRoutes);
+app.use('/api/cierre', cierreRoutes);
+app.use('/api/evaluacion', evaluacionRoutes);
+app.use('/api/inicio', inicioItemRoutes);
+app.use('/api', portafolioRoutes);
+app.use('/api', adminRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// 404 handler
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ success: false, message: 'Endpoint not found' });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  logger.error('Unhandled error', { error: err.message, stack: err.stack });
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal Server Error'
@@ -108,7 +117,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   await testConnection();
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
   });
 };
 
